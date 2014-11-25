@@ -11,9 +11,19 @@ def index(request):
     return render(request, "courses/index.html", context)
 
 
-def detail(request, pk):
+# def detail(request, pk):
 
-    course = get_object_or_404(Course, pk=pk)
+#     course = get_object_or_404(Course, pk=pk)
+
+#     context = {
+#         'course': course
+#     }
+
+#     return render(request, 'courses/detail.html', context)
+
+def detail(request, slug):
+
+    course = get_object_or_404(Course, slug=slug)
 
     context = {
         'course': course
