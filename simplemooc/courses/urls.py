@@ -8,4 +8,5 @@ urlpatterns = patterns(
     url(r'^$', 'index', name='index'),
     url(r'^(?P<slug>[\w_-]+)/$', 'detail', name='detail'),
     url(r'^(?P<slug>[\w_-]+)/inscricao/$', 'enrollment', name='enrollment'),
+    url(r'^(?P<slug>[\w_-]+)/anuncios/$', 'announcements', name='announcements'),
 )
