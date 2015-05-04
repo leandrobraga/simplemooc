@@ -5,6 +5,7 @@ from simplemooc.courses.models import Course
 from simplemooc.courses.models import Enrollment
 from simplemooc.courses.models import Announcement
 from simplemooc.courses.models import Lesson
+from simplemooc.courses.models import Material
 from .forms import ContactCourse
 from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
@@ -150,5 +151,25 @@ def lesson(request, slug, pk):
     context = {
         "course": course,
         "lesson": lesson
+    }
+    return render(request, template, context)
+
+
+@login_required
+@enrollment_required
+def material(request, slug, pk):
+    course = request.course
+    material = get_object_or_404(Material, pk=pk, lesson__course=course)
+    lesson = material.lesson
+    if not request.user.is_staff or not lesson.is_available():
+        messages.error(request, "Este material não está disponível")
+        return redirect("courses:lessons", slug=course.slug, pk=lesson.id)
+    if not material.is_embedded():
+        return redirect(material.file.url)
+    template = "courses/material.html"
+    context = {
+        "course": course,
+        "lesson": lesson,
+        "material": material,
     }
     return render(request, template, context)
