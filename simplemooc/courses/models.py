@@ -2,6 +2,7 @@
 from django.db import models
 from django.conf import settings
 from simplemooc.core.mail import send_mail_template
+from django.utils import timezone
 
 
 class CourseManager(models.Manager):
@@ -36,6 +37,10 @@ class Course(models.Model):
 
         return ('courses:detail', (), {'slug': self.slug})
 
+    def relase_lessons(self):
+        today = timezone.now().date()
+        return self.lessons.filter(release_date__gte=today)
+
     class Meta:
 
         verbose_name = "Curso"
@@ -55,6 +60,12 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_available(self):
+        if self.release_date:
+            today = timezone.now().date()
+            return self.release_date >= today
+        return False
 
     class Meta:
         verbose_name = "Aula"
@@ -104,8 +115,7 @@ class Enrollment(models.Model):
         self.save()
 
     def is_approved(self):
-        self.status = 1
-        self.save()
+        return self.status == 1
 
     class Meta:
 

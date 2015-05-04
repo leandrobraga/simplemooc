@@ -9,7 +9,7 @@ def enrollment_required(view_func):
         slug = kwargs['slug']
         course = get_object_or_404(Course, slug=slug)
         has_permission = request.user.is_superuser
-        
+
         if not has_permission:
             try:
                 enrollment = Enrollment.objects.get(

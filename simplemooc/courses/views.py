@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from simplemooc.courses.models import Course
 from simplemooc.courses.models import Enrollment
 from simplemooc.courses.models import Announcement
+from simplemooc.courses.models import Lesson
 from .forms import ContactCourse
 from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
@@ -118,4 +119,36 @@ def show_announcement(request, slug, pk):
     context['announcement'] = announcement
     context['form'] = form
 
+    return render(request, template, context)
+
+
+@login_required
+@enrollment_required
+def lessons(request, slug):
+    course = request.course
+    template = "courses/lessons.html"
+    lessons = course.relase_lessons()
+    if request.user.is_staff:
+        lessons = course.lessons.all()
+    context = {
+        "course": course,
+        "lessons": lessons
+    }
+    return render(request, template, context)
+
+
+@login_required
+@enrollment_required
+def lesson(request, slug, pk):
+
+    course = request.course
+    lesson = get_object_or_404(Lesson, pk=pk, course=course)
+    if not request.user.is_staff or not lesson.is_available():
+        messages.error(request, "Esta aula não está disponível")
+        return redirect("courses:lessons", slug=course.slug)
+    template = "courses/lesson.html"
+    context = {
+        "course": course,
+        "lesson": lesson
+    }
     return render(request, template, context)
