@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from django.contrib.auth import get_user_model
 from simplemooc.core.utils import generate_hash_key
@@ -41,7 +42,7 @@ class RegisterForm(forms.ModelForm):
         password2 = self.cleaned_data.get("password2")
 
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError('A confirmação de senha não está correta')
+            raise forms.ValidationError(u'A confirmação de senha não está correta')
 
         return password2
 
