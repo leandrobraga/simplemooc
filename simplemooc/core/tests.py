@@ -14,5 +14,5 @@ class HomeViewtest(TestCase):
     def test_home_template_used(self):
         client = Client()
         response = client.get(reverse('core:home'))
+        # self.assertTemplateUsed(response, "base .html")
         self.assertTemplateUsed(response, "home.html")
-        self.assertTemplateUsed(response, "base.html")
