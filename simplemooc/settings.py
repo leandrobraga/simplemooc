@@ -35,9 +35,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Libs
+    'taggit',
+
+    # Apps
     'simplemooc.core',
     'simplemooc.courses',
     'simplemooc.accounts',
+    'simplemooc.forum',
 )
 
 MIDDLEWARE_CLASSES = (
